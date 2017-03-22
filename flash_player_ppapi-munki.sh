@@ -5,7 +5,6 @@
 #munkirepo
 munkirepo="/repos/munki/"
 
-
 #Catalog
 munki_cat="Catalog"
 munki_cat2="testing"
