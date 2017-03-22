@@ -99,7 +99,7 @@ fi
 
 cp "$TMPMOUNT"/"Install Adobe Flash Player.app/Contents/Resources/Adobe Flash Player.pkg" "$TMPMOUNT2"/"Adobe Flash Player-NPAPI.pkg"
 
-/usr/local/munki/munkiimport "$TMPMOUNT2"/"Adobe Flash Player-NPAPI.pkg" --name="Adobe Flash Player NPAPI"  --update-for="Adobe Flash Player-PPAPI.pkg" --displayname="Adobe Flash Player NPAPI" --developer="Adobe" --description="Adobe Flash Player NPAPI" --pkgvers="${flash_version}" --unattended_install --unattended_uninstall --nointeractive --repo-path="${munkirepo}" -c "${munki_cat}" -c "${munki_cat2}"
+/usr/local/munki/munkiimport "$TMPMOUNT2"/"Adobe Flash Player-NPAPI.pkg" --name="Adobe Flash Player NPAPI" --update-for="Adobe Flash Player-PPAPI.pkg" --displayname="Adobe Flash Player NPAPI" --developer="Adobe" --description="Adobe Flash Player NPAPI" --pkgvers="${flash_version}" --unattended_install --unattended_uninstall --nointeractive --repo-path="${munkirepo}" -c "${munki_cat}" -c "${munki_cat2}"
 
 # Clean-up
 
