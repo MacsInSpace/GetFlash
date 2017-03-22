@@ -29,7 +29,7 @@ if [ -e /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist ];t
         currentinstalledNPAPI="0"
     fi
 
- if [ "${currentinstalledNPAPI}" != "${latestver}" ]; then
+ if [ "${currentinstalledNPAPI}" != "${flash_version}" ]; then
  
  if [[ ${osvers} -ge 6 ]]; then
  
@@ -98,7 +98,7 @@ fi
 
 newlyinstalledNPAPI=`/usr/bin/defaults read "/Library/Internet Plug-Ins/Flash Player.plugin/Contents/version" CFBundleShortVersionString`
         
-        if [ "${latestver}" = "${newlyinstalledNPAPI}" ]; then
+        if [ "${flash_version}" = "${newlyinstalledNPAPI}" ]; then
             /bin/echo "`date`: SUCCESS: NPAPI Flash has been updated to version ${newlyinstalledNPAPI}"
         else
             /bin/echo "`date`: ERROR: NPAPI Flash update unsuccessful, version remains at ${currentinstalledNPAPI}."
