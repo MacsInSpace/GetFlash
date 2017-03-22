@@ -87,6 +87,10 @@ if [ -e /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist ];t
        fi
     fi
     
+    #Import to munki
+    
+    munkiimport "${flash_dmg}" --name="Adobe Flash Player NPAPI" --displayname="Adobe Flash Player NPAPI" --developer="Adobe" --description="Adobe Flash Player NPAPI" --pkgvers="${flash_version}" --unattended_install --nointeractive
+    
     # Clean-up
  
     # Unmount the Flash Player disk image from /tmp/flashplayer.XXXX
