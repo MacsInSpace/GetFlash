@@ -29,7 +29,7 @@ if [ -e /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/C
         currentinstalledPPAPI="0"
     fi
 
- if [ "${currentinstalledPPAPI}" != "${latestver}" ]; then
+ if [ "${currentinstalledPPAPI}" != "${flash_version}" ]; then
  
  if [[ ${osvers} -ge 6 ]]; then
  
@@ -98,7 +98,7 @@ fi
 
 newlyinstalledPPAPI=`/usr/bin/defaults read /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/Contents/Info.plist CFBundleShortVersionString`
         
-        if [ "${latestver}" = "${newlyinstalledPPAPI}" ]; then
+        if [ "${flash_version}" = "${newlyinstalledPPAPI}" ]; then
             /bin/echo "`date`: SUCCESS: PPAPI Flash has been updated to version ${newlyinstalledPPAPI}"
         else
             /bin/echo "`date`: ERROR: PPAPI Flash update unsuccessful, version remains at ${currentinstalledPPAPI}."
