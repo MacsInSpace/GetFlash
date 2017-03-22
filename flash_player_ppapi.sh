@@ -15,7 +15,6 @@ flash_version=`/usr/bin/curl --silent http://fpdownload2.macromedia.com/get/flas
 
 fileURL="https://fpdownload.adobe.com/get/flashplayer/pdc/"$flash_version"/install_flash_player_osx_ppapi.dmg"
 
-
 # Specify name of downloaded disk image
 
 flash_dmg="/tmp/flash_ppapi.dmg"
@@ -24,7 +23,15 @@ if [[ ${osvers} -lt 6 ]]; then
   echo "Adobe Flash Player is not available for Mac OS X 10.5.8 or below."
 fi
 
-if [[ ${osvers} -ge 6 ]]; then
+if [ -e /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/Contents/Info.plist ];then
+        currentinstalledPPAPI=`/usr/bin/defaults read /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/Contents/Info.plist CFBundleShortVersionString`
+    else
+        currentinstalledPPAPI="0"
+    fi
+
+ if [ "${currentinstalledPPAPI}" != "${latestver}" ]; then
+ 
+ if [[ ${osvers} -ge 6 ]]; then
  
     # Download the latest Adobe Flash Player software disk image
 
@@ -88,5 +95,17 @@ if [[ ${osvers} -ge 6 ]]; then
 
     /bin/rm -rf "$flash_dmg"
 fi
+
+newlyinstalledPPAPI=`/usr/bin/defaults read /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/Contents/Info.plist CFBundleShortVersionString`
+        
+        if [ "${latestver}" = "${newlyinstalledPPAPI}" ]; then
+            /bin/echo "`date`: SUCCESS: PPAPI Flash has been updated to version ${newlyinstalledPPAPI}"
+        else
+            /bin/echo "`date`: ERROR: PPAPI Flash update unsuccessful, version remains at ${currentinstalledPPAPI}."
+        fi
+    # If Flash is up to date already, just log it and exit.
+    else
+        /bin/echo "`date`: PPAPI Flash is already up to date, running ${currentinstalledPPAPI}."
+    fi
 
 exit 0
