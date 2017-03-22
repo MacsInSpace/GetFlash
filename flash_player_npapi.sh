@@ -23,7 +23,15 @@ if [[ ${osvers} -lt 6 ]]; then
   echo "Adobe Flash Player is not available for Mac OS X 10.5.8 or below."
 fi
 
-if [[ ${osvers} -ge 6 ]]; then
+if [ -e /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist ];then
+        currentinstalledNPAPI=`/usr/bin/defaults read /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist CFBundleShortVersionString`
+    else
+        currentinstalledNPAPI="0"
+    fi
+
+ if [ "${currentinstalledNPAPI}" != "${latestver}" ]; then
+ 
+ if [[ ${osvers} -ge 6 ]]; then
  
     # Download the latest Adobe Flash Player software disk image
 
@@ -88,4 +96,16 @@ if [[ ${osvers} -ge 6 ]]; then
     /bin/rm -rf "$flash_dmg"
 fi
 
+newlyinstalledNPAPI=`/usr/bin/defaults read "/Library/Internet Plug-Ins/Flash Player.plugin/Contents/version" CFBundleShortVersionString`
+        
+        if [ "${latestver}" = "${newlyinstalledNPAPI}" ]; then
+            /bin/echo "`date`: SUCCESS: NPAPI Flash has been updated to version ${newlyinstalledNPAPI}"
+        else
+            /bin/echo "`date`: ERROR: NPAPI Flash update unsuccessful, version remains at ${currentinstalledNPAPI}."
+        fi
+    # If Flash is up to date already, just log it and exit.
+    else
+        /bin/echo "`date`: Flash NPAPI is already up to date, running ${currentinstalledNPAPI}."
+    fi
+    
 exit 0
