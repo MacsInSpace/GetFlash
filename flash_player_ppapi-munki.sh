@@ -87,9 +87,6 @@ if [ -e /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/C
        fi
     fi
 
-    #Munkiimport
-#    y | y | y | munkiimport $flash_dmg
-    
     # Clean-up
  
     # Unmount the Flash Player disk image from /tmp/flashplayer.XXXX
