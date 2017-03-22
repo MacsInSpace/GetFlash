@@ -3,7 +3,7 @@
 # This script downloads and installs the latest Flash player for compatible Macs
 
 #Set Proxy?
-export http_proxy=http://10.141.24.19:8080
+export http_proxy=http://10.0.0.1:800
 export https_proxy=$http_proxy
 export HTTP_PROXY=$http_proxy
 export HTTPS_PROXY=$http_proxy
