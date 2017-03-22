@@ -87,9 +87,6 @@ if [ -e /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist ];t
        fi
     fi
     
-    #Munkiimport
-#    y | y | y | munkiimport $flash_dmg
-    
     # Clean-up
  
     # Unmount the Flash Player disk image from /tmp/flashplayer.XXXX
