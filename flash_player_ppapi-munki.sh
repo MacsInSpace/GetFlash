@@ -87,6 +87,10 @@ if [ -e /Library/Internet\ Plug-Ins/PepperFlashPlayer/PepperFlashPlayer.plugin/C
        fi
     fi
 
+    # Import to munki
+    
+    munkiimport "${flash_dmg}" --name="Adobe Flash Player PPAPI" --displayname="Adobe Flash Player PPAPI" --developer="Adobe" --description="Adobe Flash Player PPAPI" --pkgvers="${flash_version}" --unattended_install --nointeractive
+    
     # Clean-up
  
     # Unmount the Flash Player disk image from /tmp/flashplayer.XXXX
