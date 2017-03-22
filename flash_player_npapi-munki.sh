@@ -2,6 +2,13 @@
 
 # This script downloads and installs the latest Flash player for compatible Macs
 
+#munkirepo
+munkirepo="/repos/munki/"
+
+#Catalog
+munki_cat="Catalog"
+munki_cat2="testing"
+
 #Set Proxy?
 export http_proxy=http://10.0.0.1:800
 export https_proxy=$http_proxy
@@ -26,96 +33,99 @@ fileURL="https://fpdownload.adobe.com/get/flashplayer/pdc/"$flash_version"/insta
 flash_dmg="/tmp/flash_npapi.dmg"
 
 if [[ ${osvers} -lt 6 ]]; then
-  echo "Adobe Flash Player is not available for Mac OS X 10.5.8 or below."
+echo "Adobe Flash Player is not available for Mac OS X 10.5.8 or below."
 fi
 
 if [ -e /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist ];then
-        currentinstalledNPAPI=`/usr/bin/defaults read /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist CFBundleShortVersionString`
-    else
-        currentinstalledNPAPI="0"
-    fi
+currentinstalledNPAPI=`/usr/bin/defaults read /Library/Internet\ Plug-Ins/Flash\ Player.plugin/Contents/Info.plist CFBundleShortVersionString`
+else
+currentinstalledNPAPI="0"
+fi
 
- if [ "${currentinstalledNPAPI}" != "${flash_version}" ]; then
- 
- if [[ ${osvers} -ge 6 ]]; then
- 
-    # Download the latest Adobe Flash Player software disk image
+if [ "${currentinstalledNPAPI}" != "${flash_version}" ]; then
 
-    /usr/bin/curl --output "$flash_dmg" "$fileURL"
+if [[ ${osvers} -ge 6 ]]; then
 
-    # Specify a /tmp/flashplayer.XXXX mountpoint for the disk image
- 
-    TMPMOUNT=`/usr/bin/mktemp -d /tmp/flashplayer.XXXX`
+# Download the latest Adobe Flash Player software disk image
 
-    # Mount the latest Flash Player disk image to /tmp/flashplayer.XXXX mountpoint
- 
-    hdiutil attach "$flash_dmg" -mountpoint "$TMPMOUNT" -nobrowse -noverify -noautoopen
-    
-    # Install Adobe Flash Player using the installer package. This installer may
-    # be stored inside an install application on the disk image, or there may be
-    # an installer package available at the root of the mounted disk image.
+/usr/bin/curl --output "$flash_dmg" "$fileURL"
 
-    if [[ -e "$(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))" ]]; then    
-      pkg_path="$(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))"
-    elif [[ -e "$(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*\.app \))" ]]; then
-         adobe_app=`(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*\.app \))`
-        if [[ -e "$(/usr/bin/find "$adobe_app"/Contents/Resources -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))" ]]; then
-          pkg_path="$(/usr/bin/find "$adobe_app"/Contents/Resources -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))"
-        fi
-    fi
+# Specify a /tmp/flashplayer.XXXX mountpoint for the disk image
 
-    # Before installation on Mac OS X 10.7.x and later, the installer's
-    # developer certificate is checked to see if it has been signed by
-    # Adobe's developer certificate. Once the certificate check has been
-    # passed, the package is then installed.
+TMPMOUNT=`/usr/bin/mktemp -d /tmp/flashplayer.XXXX`
+TMPMOUNT2=`/usr/bin/mktemp -d /tmp/flashplayer.XXXX`
 
-    if [[ ${pkg_path} != "" ]]; then
-       if [[ ${osvers} -ge 7 ]]; then
-         signature_check=`/usr/sbin/pkgutil --check-signature "$pkg_path" | awk /'Developer ID Installer/{ print $5 }'`
-         if [[ ${signature_check} = "Adobe" ]]; then
-           # Install Adobe Flash Player from the installer package stored inside the disk image
-           /usr/sbin/installer -dumplog -verbose -pkg "${pkg_path}" -target "/"
-         fi
-       fi
+# Mount the latest Flash Player disk image to /tmp/flashplayer.XXXX mountpoint
 
-    # On Mac OS X 10.6.x, the developer certificate check is not an
-    # available option, so the package is just installed.
-    
-       if [[ ${osvers} -eq 6 ]]; then
-           # Install Adobe Flash Player from the installer package stored inside the disk image
-           /usr/sbin/installer -dumplog -verbose -pkg "${pkg_path}" -target "/"
-       fi
-    fi
-    
-    #Import to munki
-    
-    munkiimport "${flash_dmg}" --name="Adobe Flash Player NPAPI" --displayname="Adobe Flash Player NPAPI" --developer="Adobe" --description="Adobe Flash Player NPAPI" --pkgvers="${flash_version}" --unattended_install --nointeractive
-    
-    # Clean-up
- 
-    # Unmount the Flash Player disk image from /tmp/flashplayer.XXXX
- 
-    /usr/bin/hdiutil detach "$TMPMOUNT"
- 
-    # Remove the /tmp/flashplayer.XXXX mountpoint
- 
-    /bin/rm -rf "$TMPMOUNT"
+hdiutil attach "$flash_dmg" -mountpoint "$TMPMOUNT" -nobrowse -noverify -noautoopen
 
-    # Remove the downloaded disk image
+# Install Adobe Flash Player using the installer package. This installer may
+# be stored inside an install application on the disk image, or there may be
+# an installer package available at the root of the mounted disk image.
 
-    /bin/rm -rf "$flash_dmg"
+if [[ -e "$(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))" ]]; then
+pkg_path="$(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))"
+elif [[ -e "$(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*\.app \))" ]]; then
+adobe_app=`(/usr/bin/find $TMPMOUNT -maxdepth 1 \( -iname \*\.app \))`
+if [[ -e "$(/usr/bin/find "$adobe_app"/Contents/Resources -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))" ]]; then
+pkg_path="$(/usr/bin/find "$adobe_app"/Contents/Resources -maxdepth 1 \( -iname \*Flash*\.pkg -o -iname \*Flash*\.mpkg \))"
+fi
+fi
+
+# Before installation on Mac OS X 10.7.x and later, the installer's
+# developer certificate is checked to see if it has been signed by
+# Adobe's developer certificate. Once the certificate check has been
+# passed, the package is then installed.
+
+if [[ ${pkg_path} != "" ]]; then
+if [[ ${osvers} -ge 7 ]]; then
+signature_check=`/usr/sbin/pkgutil --check-signature "$pkg_path" | awk /'Developer ID Installer/{ print $5 }'`
+if [[ ${signature_check} = "Adobe" ]]; then
+# Install Adobe Flash Player from the installer package stored inside the disk image
+/usr/sbin/installer -dumplog -verbose -pkg "${pkg_path}" -target "/"
+fi
+fi
+
+# On Mac OS X 10.6.x, the developer certificate check is not an
+# available option, so the package is just installed.
+
+if [[ ${osvers} -eq 6 ]]; then
+# Install Adobe Flash Player from the installer package stored inside the disk image
+/usr/sbin/installer -dumplog -verbose -pkg "${pkg_path}" -target "/"
+fi
+fi
+
+# Munki Import
+cp "$TMPMOUNT"/"Install Adobe Flash Player.app/Contents/Resources/Adobe Flash Player.pkg" "$TMPMOUNT2"/"Adobe Flash Player-NPAPI.pkg"
+
+munkiimport "$TMPMOUNT2"/"Adobe Flash Player-NPAPI.pkg" --name="Adobe Flash Player NPAPI" --displayname="Adobe Flash Player NPAPI" --developer="Adobe" --description="Adobe Flash Player NPAPI" --pkgvers="${flash_version}" --unattended_install --nointeractive --repo-path="${munkirepo}" -c "${munki_cat}" -c "${munki_cat2}"
+
+# Clean-up
+
+# Unmount the Flash Player disk image from /tmp/flashplayer.XXXX
+
+/usr/bin/hdiutil detach "$TMPMOUNT"
+
+# Remove the /tmp/flashplayer.XXXX mountpoint
+
+/bin/rm -rf "$TMPMOUNT"
+/bin/rm -rf "$TMPMOUNT2"
+
+# Remove the downloaded disk image
+
+/bin/rm -rf "$flash_dmg"
 fi
 
 newlyinstalledNPAPI=`/usr/bin/defaults read "/Library/Internet Plug-Ins/Flash Player.plugin/Contents/version" CFBundleShortVersionString`
-        
-        if [ "${flash_version}" = "${newlyinstalledNPAPI}" ]; then
-            /bin/echo "`date`: SUCCESS: NPAPI Flash has been updated to version ${newlyinstalledNPAPI}"
-        else
-            /bin/echo "`date`: ERROR: NPAPI Flash update unsuccessful, version remains at ${currentinstalledNPAPI}."
-        fi
-    # If Flash is up to date already, just log it and exit.
-    else
-        /bin/echo "`date`: Flash NPAPI is already up to date, running ${currentinstalledNPAPI}."
-    fi
-    
+
+if [ "${flash_version}" = "${newlyinstalledNPAPI}" ]; then
+/bin/echo "`date`: SUCCESS: NPAPI Flash has been updated to version ${newlyinstalledNPAPI}"
+else
+/bin/echo "`date`: ERROR: NPAPI Flash update unsuccessful, version remains at ${currentinstalledNPAPI}."
+fi
+# If Flash is up to date already, just log it and exit.
+else
+/bin/echo "`date`: Flash NPAPI is already up to date, running ${currentinstalledNPAPI}."
+fi
+
 exit 0
