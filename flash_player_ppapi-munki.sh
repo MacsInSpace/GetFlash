@@ -99,7 +99,7 @@ fi
 
 cp "$TMPMOUNT"/"Install Adobe Pepper Flash Player.app/Contents/Resources/Adobe Flash Player.pkg" "$TMPMOUNT2"/"Adobe Flash Player-PPAPI.pkg"
 
-/usr/local/munki/munkiimport "$TMPMOUNT2"/"Adobe Flash Player-PPAPI.pkg" --name="Adobe Flash Player PPAPI" --displayname="Adobe Flash Player PPAPI" --developer="Adobe" --description="Adobe Flash Player PPAPI" --pkgvers="${flash_version}" --unattended_install --nointeractive --repo-path="${munkirepo}" -c "${munki_cat}" -c "${munki_cat2}"
+/usr/local/munki/munkiimport "$TMPMOUNT2"/"Adobe Flash Player-PPAPI.pkg" --name="Adobe Flash Player PPAPI" --displayname="Adobe Flash Player PPAPI" --developer="Adobe" --description="Adobe Flash Player PPAPI" --pkgvers="${flash_version}" --unattended_install --unattended_uninstall --nointeractive --repo-path="${munkirepo}" -c "${munki_cat}" -c "${munki_cat2}"
 
 # Clean-up
 
