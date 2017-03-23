@@ -1,6 +1,6 @@
 # GetFlash
 Gets the lastest Flash versions for Mac OS. Install and/or Import to Munki..
-(npapi and ppapi)
+(npapi *and* ppapi)
 
 Modified from, and Credit to:
 rtrouton
@@ -10,5 +10,6 @@ https://www.jamf.com/jamf-nation/discussions/7658/flash-update-script
 
 
 
-Note: Set up as a *Launch Daemon.* Set to run daily. 
-Setting up and Launch *Agent* fails to run the install (/usr/sbin/installer) portion.
+Note: Set up as a *Launch Daemon.* Set to run daily/weekly. 
+Setting up and Launch *Agent* fails to run the install (/usr/sbin/installer) portion. 
+Ref: https://www.jamf.com/jamf-nation/discussions/8131/launch-agent-help
