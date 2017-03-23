@@ -10,6 +10,6 @@ https://www.jamf.com/jamf-nation/discussions/7658/flash-update-script<br>
 <br>
 <br>
 Note: Set up as a *Launch Daemon.* Set to run daily/weekly.<br>
-      Set the two to launch 5 minutes apart. Do not set them to run at the same time due to possible mount point conflicts (untested)<br>
+      Set the two to launch 5 minutes apart. Do not set them to run at the same time due to possible mount point conflicts. This is untested though.<br>
       Setting up and Launch *Agent* fails to run the install (/usr/sbin/installer) portion. <br>
       Ref: https://www.jamf.com/jamf-nation/discussions/8131/launch-agent-help<br>
