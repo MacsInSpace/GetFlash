@@ -10,3 +10,5 @@ https://www.jamf.com/jamf-nation/discussions/7658/flash-update-script
 
 
 
+Note: Set up as a *Launch Daemon.* Set to run daily. 
+Setting up and Launch *Agent* fails to run the install (/usr/sbin/installer) portion.
